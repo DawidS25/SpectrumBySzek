@@ -186,6 +186,12 @@ def run_2players():
     # ------------------------------
     if st.session_state.step in ["setup", "categories", "end"]:
         st.title("🎲 Spectrum")
+        st.markdown(
+            """
+            <div style='margin-top: -20px; font-size: 10px; color: gray;'>made by Szek</div>
+            """,
+            unsafe_allow_html=True
+        )
 
     if st.session_state.step == "setup":
         st.header("🎭 Wprowadź imiona graczy")
@@ -611,6 +617,12 @@ def run_3players():
     # ------------------------------
     if st.session_state.step in ["setup", "categories", "end"]:
         st.title("🎲 Spectrum")
+        st.markdown(
+            """
+            <div style='margin-top: -20px; font-size: 10px; color: gray;'>made by Szek</div>
+            """,
+            unsafe_allow_html=True
+        )
 
     if st.session_state.step == "setup":
         st.header("🎭 Wprowadź imiona graczy")
@@ -1057,6 +1069,12 @@ def run_teams():
     # ------------------------------
     if st.session_state.step in ["setup", "categories", "end"]:
         st.title("🎲 Spectrum")
+        st.markdown(
+            """
+            <div style='margin-top: -20px; font-size: 10px; color: gray;'>made by Szek</div>
+            """,
+            unsafe_allow_html=True
+        )
 
     if st.session_state.step == "setup":
         st.header("🎭 Wprowadź nazwy drużyn i imiona graczy")
