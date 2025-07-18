@@ -309,6 +309,12 @@ def run_2players():
             current_question_number = st.session_state.questions_asked + 1
 
             st.markdown(f"### 🥊 Runda {current_round}")
+            st.markdown(
+                """
+                <div style='margin-top: -20px; font-size: 10px; color: gray;'>Spectrum - made by Szek</div>
+                """,
+                unsafe_allow_html=True
+            )
             st.subheader(f"🧠 Pytanie {current_question_number} – kategoria: *{q['categories']}*")
             st.write(q["text"])
             st.markdown(f"<small>id: {q['id']}</small>", unsafe_allow_html=True)
@@ -747,6 +753,12 @@ def run_3players():
             current_question_number = st.session_state.questions_asked + 1
 
             st.markdown(f"### 🥊 Runda {current_round}")
+            st.markdown(
+                """
+                <div style='margin-top: -20px; font-size: 10px; color: gray;'>Spectrum - made by Szek</div>
+                """,
+                unsafe_allow_html=True
+            )
             st.subheader(f"🧠 Pytanie {current_question_number} – kategoria: *{q['categories']}*")
             st.write(q["text"])
             st.markdown(f"<small>id: {q['id']}</small>", unsafe_allow_html=True)
@@ -1278,6 +1290,12 @@ def run_teams():
         q = st.session_state.current_question
 
         st.markdown(f"### 🥊 Runda {current_round}")
+        st.markdown(
+            """
+            <div style='margin-top: -20px; font-size: 10px; color: gray;'>Spectrum - made by Szek</div>
+            """,
+                unsafe_allow_html=True
+        )
         st.subheader(f"🧠 Pytanie {current_q_num + 1} – kategoria: *{q['categories']}*")
         st.write(q["text"])
         st.markdown(f"<small>id: {q['id']}</small>", unsafe_allow_html=True)
