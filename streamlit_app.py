@@ -5,8 +5,15 @@ def main():
         st.session_state.step = "mode_select"
 
     if st.session_state.step == "mode_select":
-        st.title("🎲 Spectrum - Wybierz tryb gry")
-        st.write("Wybierz tryb gry:")
+        st.title("🎲 Spectrum")
+        st.markdown(
+            """
+            <div style='margin-top: -20px; font-size: 10px; color: gray;'>made by Szek</div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        st.header("Wybierz tryb gry:")
 
         col1, col2, col3 = st.columns(3)
 
