@@ -412,7 +412,7 @@ def run_2players():
                 with open(temp_filename, "wb") as f:
                     f.write(data)
 
-                repo = "DawidS25/SpectrumDual"  # zmień na swoje repo
+                repo = "DawidS25/SpectrumBySzek"  # zmień na swoje repo
                 try:
                     token = st.secrets["GITHUB_TOKEN"]
                 except Exception:
@@ -830,7 +830,7 @@ def run_3players():
                 with open(temp_filename, "wb") as f:
                     f.write(data)
 
-                repo = "DawidS25/Spectrum"
+                repo = "DawidS25/SpectrumBySzek"
                 try:
                     token = st.secrets["GITHUB_TOKEN"]
                 except Exception:
@@ -1403,7 +1403,7 @@ def run_teams():
                 with open(temp_filename, "wb") as f:
                     f.write(data)
 
-                repo = "DawidS25/SpectrumDruzynowe"
+                repo = "DawidS25/SpectrumBySzek"
                 try:
                     token = st.secrets["GITHUB_TOKEN"]
                 except Exception:
