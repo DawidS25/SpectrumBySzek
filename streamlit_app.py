@@ -1,10 +1,10 @@
 import streamlit as st
 
 def main():
-    if "game_mode" not in st.session_state:
-        st.session_state.game_mode = None
+    if "step" not in st.session_state:
+        st.session_state.step = "mode_select"
 
-    if st.session_state.game_mode is None:
+    if st.session_state.step == "mode_select":
         st.title("🎲 Spectrum - Wybierz tryb gry")
         st.write("Wybierz tryb gry:")
 
@@ -13,26 +13,29 @@ def main():
         with col1:
             if st.button("2-osobowa"):
                 st.session_state.game_mode = "2players"
+                st.session_state.step = "setup"  # pierwszy krok gry
                 st.rerun()
 
         with col2:
             if st.button("3-osobowa"):
                 st.session_state.game_mode = "3players"
+                st.session_state.step = "setup"
                 st.rerun()
 
         with col3:
             if st.button("Drużynowa"):
                 st.session_state.game_mode = "teams"
+                st.session_state.step = "setup"
                 st.rerun()
 
     else:
-        # Nie pokazuj już tytułu i komunikatu – od razu uruchom logikę gry
         if st.session_state.game_mode == "2players":
             run_2players()
         elif st.session_state.game_mode == "3players":
             run_3players()
         elif st.session_state.game_mode == "teams":
             run_teams()
+
 
 def run_2players():
     import streamlit as st
@@ -185,14 +188,28 @@ def run_2players():
             name = st.text_input(f"🙋‍♂️ Gracz {i + 1}", value=st.session_state.players[i])
             player_names.append(name.strip())
 
-        if all(player_names):
-            if st.button("✅ Dalej"):
-                st.session_state.players = player_names
-                st.session_state.all_players = player_names.copy()
-                st.session_state.scores = {name: 0 for name in player_names}
-                st.session_state.results_data = []
-                st.session_state.step = "categories"
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("🔙 Powrót"):
+                # czyść wpisane imiona i inne dane powiązane z grą 3-osobową
+                if "players" in st.session_state:
+                    del st.session_state["players"]
+                if "all_players" in st.session_state:
+                    del st.session_state["all_players"]
+                if "category_selection" in st.session_state:
+                    del st.session_state["category_selection"]
+                st.session_state.step = "mode_select"
                 st.rerun()
+
+        with col2:
+            if all(player_names):
+                if st.button("✅ Dalej"):
+                    st.session_state.players = player_names
+                    st.session_state.all_players = player_names.copy()
+                    st.session_state.scores = {name: 0 for name in player_names}
+                    st.session_state.results_data = []
+                    st.session_state.step = "categories"
+                    st.rerun()
 
     elif st.session_state.step == "categories":
         st.header("📚 Wybierz kategorie pytań")
@@ -216,11 +233,21 @@ def run_2players():
         selected_display = [f"{CATEGORY_EMOJIS.get(cat, '')} {cat}" for cat in st.session_state.category_selection]
         st.markdown(f"**Wybrane kategorie:** {', '.join(selected_display) or 'Brak'}")
 
-        if st.session_state.category_selection:
-            if st.button("🎯 Rozpocznij grę"):
-                st.session_state.chosen_categories = list(st.session_state.category_selection)
-                st.session_state.step = "game"
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("🔙 Powrót"):
+                # czyść wpisane imiona i inne dane powiązane z grą 3-osobową
+                if "category_selection" in st.session_state:
+                    del st.session_state["category_selection"]
+                st.session_state.step = "setup"
                 st.rerun()
+
+        with col2:
+            if st.session_state.category_selection:
+                if st.button("🎯 Rozpocznij grę"):
+                    st.session_state.chosen_categories = list(st.session_state.category_selection)
+                    st.session_state.step = "game"
+                    st.rerun()
 
     elif st.session_state.step == "game":
         # Zapewnij domyślne wartości
@@ -586,14 +613,28 @@ def run_3players():
             name = st.text_input(f"🙋‍♂️ Gracz {i + 1}", value=st.session_state.players[i])
             player_names.append(name.strip())
 
-        if all(player_names):
-            if st.button("✅ Dalej"):
-                st.session_state.players = player_names
-                st.session_state.all_players = player_names.copy()
-                st.session_state.scores = {name: 0 for name in player_names}
-                st.session_state.results_data = []
-                st.session_state.step = "categories"
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("🔙 Powrót"):
+                # czyść wpisane imiona i inne dane powiązane z grą 3-osobową
+                if "players" in st.session_state:
+                    del st.session_state["players"]
+                if "all_players" in st.session_state:
+                    del st.session_state["all_players"]
+                if "category_selection" in st.session_state:
+                    del st.session_state["category_selection"]
+                st.session_state.step = "mode_select"
                 st.rerun()
+
+        with col2:
+            if all(player_names):
+                if st.button("✅ Dalej"):
+                    st.session_state.players = player_names
+                    st.session_state.all_players = player_names.copy()
+                    st.session_state.scores = {name: 0 for name in player_names}
+                    st.session_state.results_data = []
+                    st.session_state.step = "categories"
+                    st.rerun()
 
     elif st.session_state.step == "categories":
         st.header("📚 Wybierz kategorie pytań")
@@ -617,11 +658,21 @@ def run_3players():
         selected_display = [f"{CATEGORY_EMOJIS.get(cat, '')} {cat}" for cat in st.session_state.category_selection]
         st.markdown(f"**Wybrane kategorie:** {', '.join(selected_display) or 'Brak'}")
 
-        if st.session_state.category_selection:
-            if st.button("🎯 Rozpocznij grę"):
-                st.session_state.chosen_categories = list(st.session_state.category_selection)
-                st.session_state.step = "game"
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("🔙 Powrót"):
+                # czyść wpisane imiona i inne dane powiązane z grą 3-osobową
+                if "category_selection" in st.session_state:
+                    del st.session_state["category_selection"]
+                st.session_state.step = "setup"
                 st.rerun()
+
+        with col2:
+            if st.session_state.category_selection:
+                if st.button("🎯 Rozpocznij grę"):
+                    st.session_state.chosen_categories = list(st.session_state.category_selection)
+                    st.session_state.step = "game"
+                    st.rerun()
 
     elif st.session_state.step == "game":
         # Zapewnij domyślne wartości
@@ -1052,46 +1103,61 @@ def run_teams():
         if not valid_players_count():
             st.warning("⚠️ Każda drużyna musi mieć od 2 do 7 graczy (łącznie minimum 4, maksimum 14 imion).")
 
-        if valid_players_count():
-            if st.button("✅ Dalej"):
-                # Inicjalizacja punktów i danych
-                st.session_state.scores = {}
-                st.session_state.results_data = []
-
-                team_0_key = st.session_state.team_names[0]
-                team_1_key = st.session_state.team_names[1]
-                all_players = []
-
-                for p in st.session_state.players_team_0:
-                    if p.strip():
-                        player_key = f"{p.strip()}_{team_0_key}"
-                        all_players.append(player_key)
-
-                for p in st.session_state.players_team_1:
-                    if p.strip():
-                        player_key = f"{p.strip()}_{team_1_key}"
-                        all_players.append(player_key)
-
-                st.session_state.all_players = all_players
-
-                # Inicjalizacja punktacji graczy
-                for p in all_players:
-                    st.session_state.scores[p] = 0
-
-                # Punktacja drużyn
-                st.session_state.scores[team_0_key] = 0
-                st.session_state.scores[team_1_key] = 0
-
-                # Przypisanie listy graczy do drużyn
-                st.session_state.team_players = {
-                    team_0_key: [p for p in st.session_state.players_team_0 if p.strip()],
-                    team_1_key: [p for p in st.session_state.players_team_1 if p.strip()]
-                }
-
-                # Przejście dalej
-                st.session_state.step = "categories"
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("🔙 Powrót"):
+                # Usuń imiona graczy drużynowych
+                if "players_team_0" in st.session_state:
+                    del st.session_state["players_team_0"]
+                if "players_team_1" in st.session_state:
+                    del st.session_state["players_team_1"]
+                if "team_names" in st.session_state:
+                    del st.session_state["team_names"]
+                if "category_selection" in st.session_state:
+                    del st.session_state["category_selection"]
+                st.session_state.step = "mode_select"
                 st.rerun()
 
+        with col2:
+            if valid_players_count():
+                if st.button("✅ Dalej"):
+                    # Inicjalizacja punktów i danych
+                    st.session_state.scores = {}
+                    st.session_state.results_data = []
+
+                    team_0_key = st.session_state.team_names[0]
+                    team_1_key = st.session_state.team_names[1]
+                    all_players = []
+
+                    for p in st.session_state.players_team_0:
+                        if p.strip():
+                            player_key = f"{p.strip()}_{team_0_key}"
+                            all_players.append(player_key)
+
+                    for p in st.session_state.players_team_1:
+                        if p.strip():
+                            player_key = f"{p.strip()}_{team_1_key}"
+                            all_players.append(player_key)
+
+                    st.session_state.all_players = all_players
+
+                    # Inicjalizacja punktacji graczy
+                    for p in all_players:
+                        st.session_state.scores[p] = 0
+
+                    # Punktacja drużyn
+                    st.session_state.scores[team_0_key] = 0
+                    st.session_state.scores[team_1_key] = 0
+
+                    # Przypisanie listy graczy do drużyn
+                    st.session_state.team_players = {
+                        team_0_key: [p for p in st.session_state.players_team_0 if p.strip()],
+                        team_1_key: [p for p in st.session_state.players_team_1 if p.strip()]
+                    }
+
+                    # Przejście dalej
+                    st.session_state.step = "categories"
+                    st.rerun()
 
     # ------------------------------
     # KATEGORIE - bez zmian
@@ -1117,11 +1183,21 @@ def run_teams():
         selected_display = [f"{CATEGORY_EMOJIS.get(cat, '')} {cat}" for cat in st.session_state.category_selection]
         st.markdown(f"**Wybrane kategorie:** {', '.join(selected_display) or 'Brak'}")
 
-        if st.session_state.category_selection:
-            if st.button("🎯 Rozpocznij grę"):
-                st.session_state.chosen_categories = list(st.session_state.category_selection)
-                st.session_state.step = "game"
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("🔙 Powrót"):
+                # czyść wpisane imiona i inne dane powiązane z grą 3-osobową
+                if "category_selection" in st.session_state:
+                    del st.session_state["category_selection"]
+                st.session_state.step = "setup"
                 st.rerun()
+
+        with col2:
+            if st.session_state.category_selection:
+                if st.button("🎯 Rozpocznij grę"):
+                    st.session_state.chosen_categories = list(st.session_state.category_selection)
+                    st.session_state.step = "game"
+                    st.rerun()
 
     # ------------------------------
     # LOGIKA GRY
