@@ -83,7 +83,7 @@ def draw_circle_with_punktacja_and_promien(punktacja_slider_val, promien_slider_
     rad = np.deg2rad(promien_angle)
     x_end = np.cos(rad)
     y_end = np.sin(rad)
-    ax.plot([0, x_end], [0, y_end], color=colors["promien"], linewidth=3)
+    ax.plot([0, x_end], [0, y_end], color=colors["promien"], linewidth=1)
 
     return fig
 
@@ -108,10 +108,14 @@ if st.session_state.screen == "tarcza":
 
     st.pyplot(fig)
 
-    if st.button("Zatwierdź"):
+    
+    def przejdz_do_promienia():
         st.session_state.screen = "promien"
         st.session_state.promien_val = 0
         st.session_state.punktacja = st.session_state.slider_val
+
+    st.button("Zatwierdź", on_click=przejdz_do_promienia)
+
 
 elif st.session_state.screen == "promien":
     st.markdown("### Wskaż odpowiedź")
@@ -120,22 +124,30 @@ elif st.session_state.screen == "promien":
     st.pyplot(draw_circle_with_promien(shift_promien))
 
     col1, col2 = st.columns(2)
+
+    def przejdz_do_wyniku():
+        st.session_state.screen = "wynik"
+    
+    def powrot_do_tarczy():
+        st.session_state.screen = "tarcza"
+
     with col1:
-        if st.button("Powrót"):
-            st.session_state.screen = "tarcza"
+        st.button("Powrót", on_click=powrot_do_tarczy)
     with col2:
-        if st.button("Zatwierdź2"):
-            st.session_state.screen = "wynik"
+        st.button("Zatwierdź", on_click=przejdz_do_wyniku)
 
 elif st.session_state.screen == "wynik":
     st.markdown("### Wynik rundy")
     st.pyplot(draw_circle_with_punktacja_and_promien(st.session_state.punktacja, st.session_state.promien_val))
 
-    if st.button("Kolejna runda"):
+    def nowa_runda():
         st.session_state.screen = "tarcza"
         st.session_state.slider_val = 0
         st.session_state.promien_val = 0
         st.session_state.punktacja = None
+
+    st.button("Kolejna runda", on_click=nowa_runda)
+
 
 # git pull origin main --rebase
 # git add .
